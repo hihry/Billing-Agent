@@ -15,8 +15,8 @@ venv/
 env/
 ENV/
 
-# Poetry
-poetry.lock
+# Poetry / Python local config
+.python-version
 
 # Testing and coverage
 .pytest_cache/
@@ -37,6 +37,12 @@ htmlcov/
 .env
 .env.*
 !.env.example
+
+# Local runtime data
+*.db
+*.sqlite
+*.sqlite3
+*.log
 
 # OS files
 .DS_Store
