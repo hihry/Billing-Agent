@@ -10,11 +10,12 @@ from typing import Any
 
 from fastapi import APIRouter, Request, Response, status
 
-from app.api.schemas import IngestAllRowsRejectedResponse, IngestLogResponse, LogSummary
+from app.api.schemas import IngestAllRowsRejectedResponse, IngestLogResponse, LogSummary, NarrativeResponse
 from app.engine.analytics import compute_analytics
 from app.engine.reconciliation import compute_reconciliation
 from app.ingestion.parser import parse_billing_log
 from app.models.reports import AnalyticsReport, ReconciliationReport
+from app.narrative.service import generate_narrative
 from app.storage.repository import LogRepository
 
 router = APIRouter(prefix="/api")
@@ -92,3 +93,58 @@ def get_reconciliation(log_id: str, request: Request):
 def get_analytics(log_id: str, request: Request):
     repo = get_repository(request)
     return repo.get_cached_analytics(log_id)  # raises 404 internally if missing
+
+
+@router.post("/logs/{log_id}/narrative", response_model=NarrativeResponse)
+def generate_narrative_endpoint(log_id: str, request: Request):
+    repo = get_repository(request)
+
+    reconciliation = repo.get_cached_reconciliation(log_id)  # raises 404 if log missing
+    analytics = repo.get_cached_analytics(log_id)
+    meta = repo.get_log_meta(log_id)
+
+    llm_client = getattr(request.app.state, "llm_client", None)
+
+    content, grounding_status = generate_narrative(
+        reconciliation=reconciliation.model_dump(),
+        analytics=analytics.model_dump(),
+        clinic_id=meta["clinic_id"],
+        log_date=meta["log_date"],
+        llm_client=llm_client,
+    )
+    generated_at = repo.save_narrative(log_id, content, grounding_status)
+
+    return NarrativeResponse(
+        log_id=log_id,
+        narrative=content.narrative,
+        cited_figures=content.cited_figures,
+        grounding_status=grounding_status,
+        generated_at=generated_at,
+    )
+
+
+@router.get("/logs/{log_id}/narrative", response_model=NarrativeResponse)
+def get_narrative_endpoint(log_id: str, request: Request):
+    repo = get_repository(request)
+
+    if not repo.log_exists(log_id):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail=f"No log found with log_id '{log_id}'")
+
+    cached = repo.get_narrative(log_id)
+    if cached is None:
+        from fastapi import HTTPException
+        raise HTTPException(
+            status_code=404,
+            detail=f"No narrative generated yet for log_id '{log_id}'. "
+                   f"POST to this endpoint first to generate one.",
+        )
+
+    content, grounding_status, generated_at = cached
+    return NarrativeResponse(
+        log_id=log_id,
+        narrative=content.narrative,
+        cited_figures=content.cited_figures,
+        grounding_status=grounding_status,
+        generated_at=generated_at,
+    )
