@@ -1,0 +1,46 @@
+.tfp-intro {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: -8px 0 var(--space-4) 0;
+}
+
+.tfp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tfp-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tfp-item:last-child {
+  border-bottom: none;
+}
+
+.tfp-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-navy-ink);
+}
+
+.tfp-field {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-teal);
+  background: var(--color-teal-light);
+  border-radius: 4px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}

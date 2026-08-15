@@ -1,0 +1,15 @@
+.analytics-chart-row {
+  margin-bottom: var(--space-5);
+}
+
+.analytics-rank-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 720px) {
+  .analytics-rank-row {
+    grid-template-columns: 1fr;
+  }
+}

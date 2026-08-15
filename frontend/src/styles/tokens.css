@@ -1,0 +1,53 @@
+/*
+  Design tokens, read off the SwasthiQ mockup itself:
+  - Deep navy blue wordmark/header ("Kaagazy Technologies", "SwasthiQ" text)
+  - Teal plus-icon accent in the logo
+  - Clean white cards on a very light neutral background
+  - Sparse hairline borders, no heavy shadows, healthcare-SaaS restraint
+
+  The brief itself pins the visual direction ("build your React frontend
+  to match them"), so per the design skill, we follow the mockup's own
+  choices rather than introduce an unrelated aesthetic.
+*/
+
+:root {
+  /* Color */
+  --color-navy: #163A5F;       /* primary brand, header/sidebar */
+  --color-navy-ink: #0F2A45;   /* darker navy for text on light bg */
+  --color-teal: #2BA89D;       /* accent, matches the logo's plus icon */
+  --color-teal-light: #E4F5F3;
+  --color-bg: #F5F7FA;         /* page background */
+  --color-surface: #FFFFFF;    /* cards */
+  --color-border: #E3E8EF;
+  --color-text: #1A2433;
+  --color-text-secondary: #64748B;
+  --color-text-muted: #94A3B8;
+  --color-success-bg: #E8F7EC;
+  --color-success-text: #1E7B34;
+  --color-danger-text: #B3261E;
+  --color-outstanding-text: #B7791F;
+
+  /* Type */
+  --font-ui: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", monospace;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Shadow: sparse, only where it earns its place */
+  --shadow-card: 0 1px 2px rgba(15, 42, 69, 0.04), 0 1px 8px rgba(15, 42, 69, 0.03);
+
+  /* Layout */
+  --sidebar-width: 260px;
+}

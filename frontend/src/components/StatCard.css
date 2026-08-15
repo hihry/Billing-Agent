@@ -1,0 +1,38 @@
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: var(--shadow-card);
+}
+
+.stat-card-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.stat-card-value {
+  font-family: var(--font-ui);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-navy-ink);
+  letter-spacing: -0.01em;
+}
+
+.stat-card-sublabel {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.tone-neutral { color: var(--color-text-secondary); }
+.tone-success { color: var(--color-success-text); }
+.tone-warning { color: var(--color-outstanding-text); }
+.tone-danger  { color: var(--color-danger-text); }

@@ -1,0 +1,31 @@
+.rbh-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.rbh-peak-label {
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-teal);
+}
+
+.rbh-chart-wrap {
+  margin: 0 calc(-1 * var(--space-2));
+}
+
+.rbh-tooltip {
+  background: var(--color-navy-ink);
+  color: #fff;
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

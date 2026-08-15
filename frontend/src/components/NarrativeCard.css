@@ -1,0 +1,52 @@
+.narrative-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.narrative-card-header {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.narrative-bubble {
+  background: var(--color-success-bg);
+  border: 1px solid #CDEBD4;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.narrative-bubble p {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-navy-ink);
+  white-space: pre-wrap;
+}
+
+.narrative-status-badge {
+  align-self: flex-start;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.narrative-status-badge.tone-success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.narrative-status-badge.tone-warning {
+  background: #FDF3E3;
+  color: var(--color-outstanding-text);
+}
+
+.narrative-status-badge.tone-neutral {
+  background: #EEF1F5;
+  color: var(--color-text-secondary);
+}
