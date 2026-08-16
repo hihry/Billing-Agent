@@ -56,13 +56,26 @@ def generate_narrative(
 ) -> tuple[NarrativeContent, str]:
     """Returns (content, grounding_status). NEVER raises — every failure
     mode resolves to the deterministic fallback, which is always grounded
-    by construction."""
+    by construction.
+
+    IMPORTANT: this covers failures in build_whitelist()/build_prompt()
+    too, not just the LLM call itself — a malformed report shape or an
+    unparseable log_date must still degrade to the fallback template, not
+    bubble up as a 500. (This used to be a real bug: those two calls sat
+    outside the try/except, silently breaking the "never raises" promise
+    this docstring makes. Fixed by wrapping the whole flow.)"""
 
     if llm_client is None:
         return fallback_template_narrative(reconciliation, analytics), "fallback_no_llm_configured"
 
-    whitelist = build_whitelist(reconciliation, analytics, log_date)
-    system_prompt, user_prompt = build_prompt(reconciliation, analytics, clinic_id, log_date)
+    try:
+        whitelist = build_whitelist(reconciliation, analytics, log_date)
+        system_prompt, user_prompt = build_prompt(reconciliation, analytics, clinic_id, log_date)
+    except Exception:
+        # A report-shape or date-parsing problem, not an LLM problem —
+        # but the outcome must be identical: degrade to the fallback,
+        # never surface as a 500.
+        return fallback_template_narrative(reconciliation, analytics), "fallback_malformed_response"
 
     # --- attempt 1 ---
     try:
@@ -76,7 +89,11 @@ def generate_narrative(
         # request 500 just because the LLM provider had an outage.
         return fallback_template_narrative(reconciliation, analytics), "fallback_malformed_response"
 
-    ok, invented = validate_narrative(content.narrative, whitelist)
+    try:
+        ok, invented = validate_narrative(content.narrative, whitelist)
+    except Exception:
+        return fallback_template_narrative(reconciliation, analytics), "fallback_malformed_response"
+
     if ok:
         return content, "llm_grounded"
 
@@ -86,10 +103,10 @@ def generate_narrative(
         raw2 = llm_client.generate(system_prompt, retry_prompt)
         parsed2 = _parse_llm_json(raw2)
         content2 = NarrativeContent(**parsed2)
+        ok2, _ = validate_narrative(content2.narrative, whitelist)
     except Exception:
         return fallback_template_narrative(reconciliation, analytics), "fallback_ungrounded_after_retry"
 
-    ok2, _ = validate_narrative(content2.narrative, whitelist)
     if ok2:
         return content2, "llm_retry_grounded"
 

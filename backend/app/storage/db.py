@@ -62,6 +62,13 @@ CREATE TABLE IF NOT EXISTS reports_cache (
     analytics_json          TEXT NOT NULL,
     computed_at             TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS narratives (
+    log_id              TEXT PRIMARY KEY REFERENCES billing_logs(log_id),
+    narrative_json      TEXT NOT NULL,
+    grounding_status    TEXT NOT NULL,
+    generated_at        TEXT NOT NULL
+);
 """
 
 
